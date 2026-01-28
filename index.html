@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小黑的成长日记 - 记录我的想法与成长</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#333333',
+                        secondary: '#666666',
+                        accent: '#FF6B6B',
+                        light: '#F8F9FA',
+                        dark: '#212529',
+                        cat: '#4ECDC4'
+                    },
+                    fontFamily: {
+                        cute: ['Comic Sans MS', 'Chalkboard SE', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'bounce-slow': 'bounce 4s infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .hand-drawn {
+                border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+                border: 2px solid #6C5B7B;
+                box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.1);
+            }
+            .hand-drawn-btn {
+                border-radius: 20px 5px 20px 5px;
+                transform: rotate(-1deg);
+                transition: all 0.3s ease;
+            }
+            .hand-drawn-btn:hover {
+                transform: rotate(1deg) scale(1.05);
+            }
+            .paper-texture {
+                background-image: url('data:image/png;base64,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');
+            }
+        }
+    </style>
+</head>
+<body class="bg-light min-h-screen font-cute text-dark paper-texture">
+    <!-- 顶部导航 -->
+    <header class="bg-cat/90 backdrop-blur-sm sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-white drop-shadow-lg flex items-center">
+                <i class="fa fa-paw mr-2 animate-pulse"></i>
+                小黑的成长日记
+            </h1>
+            <div class="flex space-x-4">
+                <button id="new-entry-btn" class="bg-white text-cat px-4 py-2 rounded-full hand-drawn-btn font-bold flex items-center">
+                    <i class="fa fa-plus-circle mr-2"></i> 新想法
+                </button>
+                <button id="theme-toggle" class="bg-white text-cat px-4 py-2 rounded-full hand-drawn-btn font-bold flex items-center">
+                    <i class="fa fa-moon-o mr-2"></i> 切换主题
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- 欢迎区 -->
+        <section class="mb-12 text-center">
+            <div class="inline-block bg-accent/80 p-6 rounded-3xl hand-drawn">
+                <h2 class="text-2xl font-bold mb-2">嘿！欢迎来到小黑的成长空间 🌟</h2>
+                <p class="text-lg">这里是我的个人成长日记，记录每一个想法和成长的瞬间！</p>
+            </div>
+        </section>
+
+        <!-- 记录表单 -->
+        <section id="entry-form" class="mb-12 bg-white p-6 rounded-3xl hand-drawn shadow-lg">
+            <h3 class="text-2xl font-bold mb-4 text-cat flex items-center">
+                <i class="fa fa-pencil-square-o mr-2"></i> 我的成长记录
+            </h3>
+            
+            <div class="space-y-6">
+                <!-- 日期选择 -->
+                <div>
+                    <label class="block text-lg font-medium mb-2">日期</label>
+                    <input type="date" id="entry-date" class="w-full px-4 py-3 border-2 border-secondary rounded-xl focus:outline-none focus:ring-2 focus:ring-cat">
+                </div>
+                
+                <!-- 标题 -->
+                <div>
+                    <label class="block text-lg font-medium mb-2">标题</label>
+                    <input type="text" id="entry-title" placeholder="给今天的想法起个有趣的标题吧" class="w-full px-4 py-3 border-2 border-secondary rounded-xl focus:outline-none focus:ring-2 focus:ring-cat">
+                </div>
+                
+                <!-- 文本内容 -->
+                <div>
+                    <label class="block text-lg font-medium mb-2">我的想法</label>
+                    <textarea id="entry-content" rows="6" placeholder="今天有什么想法？学到了什么？有什么感悟？想记录什么有趣的事情..." class="w-full px-4 py-3 border-2 border-secondary rounded-xl focus:outline-none focus:ring-2 focus:ring-cat"></textarea>
+                </div>
+                
+                <!-- 成长反思 -->
+                <div>
+                    <label class="block text-lg font-medium mb-2">成长反思</label>
+                    <textarea id="entry-review" rows="4" placeholder="今天的成长是什么？有什么需要改进的地方？对未来的期待..." class="w-full px-4 py-3 border-2 border-secondary rounded-xl focus:outline-none focus:ring-2 focus:ring-cat"></textarea>
+                </div>
+                
+                <!-- 图片上传 -->
+                <div>
+                    <label class="block text-lg font-medium mb-2">上传图片</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="upload-area bg-secondary/30 border-2 border-dashed border-secondary rounded-xl p-4 text-center cursor-pointer hover:bg-secondary/50 transition-colors">
+                            <input type="file" class="hidden" accept="image/*" multiple>
+                            <i class="fa fa-camera text-4xl text-cat mb-2"></i>
+                            <p>点击上传</p>
+                        </div>
+                        <div class="upload-area bg-secondary/30 border-2 border-dashed border-secondary rounded-xl p-4 text-center cursor-pointer hover:bg-secondary/50 transition-colors">
+                            <input type="file" class="hidden" accept="image/*">
+                            <i class="fa fa-camera text-4xl text-cat mb-2"></i>
+                            <p>点击上传</p>
+                        </div>
+                        <div class="upload-area bg-secondary/30 border-2 border-dashed border-secondary rounded-xl p-4 text-center cursor-pointer hover:bg-secondary/50 transition-colors">
+                            <input type="file" class="hidden" accept="image/*">
+                            <i class="fa fa-camera text-4xl text-cat mb-2"></i>
+                            <p>点击上传</p>
+                        </div>
+                        <div class="upload-area bg-secondary/30 border-2 border-dashed border-secondary rounded-xl p-4 text-center cursor-pointer hover:bg-secondary/50 transition-colors">
+                            <input type="file" class="hidden" accept="image/*">
+                            <i class="fa fa-camera text-4xl text-cat mb-2"></i>
+                            <p>点击上传</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 标签选择 -->
+                <div>
+                    <label class="block text-lg font-medium mb-2">标签</label>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="tag-btn px-4 py-2 bg-accent/50 rounded-full hover:bg-accent transition-colors">学习感悟</button>
+                        <button class="tag-btn px-4 py-2 bg-accent/50 rounded-full hover:bg-accent transition-colors">生活记录</button>
+                        <button class="tag-btn px-4 py-2 bg-accent/50 rounded-full hover:bg-accent transition-colors">灵感创意</button>
+                        <button class="tag-btn px-4 py-2 bg-accent/50 rounded-full hover:bg-accent transition-colors">成长反思</button>
+                        <button class="tag-btn px-4 py-2 bg-accent/50 rounded-full hover:bg-accent transition-colors">未来计划</button>
+                        <button class="tag-btn px-4 py-2 bg-accent/50 rounded-full hover:bg-accent transition-colors">其他</button>
+                    </div>
+                </div>
+                
+                <!-- 保存按钮 -->
+                <div class="flex justify-center">
+                    <button id="save-entry" class="bg-cat text-white px-8 py-4 rounded-2xl hand-drawn-btn font-bold text-lg flex items-center shadow-lg">
+                        <i class="fa fa-paw mr-2"></i> 保存记录
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 记录列表 -->
+        <section id="entries-list">
+            <h3 class="text-2xl font-bold mb-6 text-cat flex items-center">
+                <i class="fa fa-book mr-2"></i> 我的成长足迹
+            </h3>
+            
+            <div class="space-y-8">
+                <!-- 示例记录 -->
+                <div class="bg-white p-6 rounded-3xl hand-drawn shadow-md">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="bg-accent/50 px-3 py-1 rounded-full text-sm">2024-01-20</span>
+                            <h4 class="text-xl font-bold mt-2">学习编程的第一天</h4>
+                        </div>
+                        <div class="flex space-x-2">
+                            <span class="bg-secondary/50 px-3 py-1 rounded-full text-sm">学习感悟</span>
+                            <span class="bg-secondary/50 px-3 py-1 rounded-full text-sm">成长反思</span>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-4">今天开始学习编程，虽然一开始有点难，但是当我成功写出第一个Hello World程序时，真的超级有成就感！感觉自己迈出了成长的第一步，以后要继续努力！</p>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute%20cat%20programming%20computer%20hand-drawn%20style%20lo%20xiaohei&image_size=square" alt="编程学习" class="rounded-xl shadow-sm">
+                        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute%20cat%20happy%20achievement%20hand-drawn%20style%20lo%20xiaohei&image_size=square" alt="成就感" class="rounded-xl shadow-sm">
+                    </div>
+                    
+                    <div class="bg-secondary/30 p-4 rounded-xl">
+                        <h5 class="font-bold mb-2">成长反思</h5>
+                        <p>今天学习很充实，虽然遇到了一些困难，但是都克服了。明天要继续学习新的知识，保持这种学习热情！</p>
+                    </div>
+                </div>
+                
+                <!-- 示例记录2 -->
+                <div class="bg-white p-6 rounded-3xl hand-drawn shadow-md">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="bg-accent/50 px-3 py-1 rounded-full text-sm">2024-01-19</span>
+                            <h4 class="text-xl font-bold mt-2">读完第一本书</h4>
+                        </div>
+                        <div class="flex space-x-2">
+                            <span class="bg-secondary/50 px-3 py-1 rounded-full text-sm">生活记录</span>
+                            <span class="bg-secondary/50 px-3 py-1 rounded-full text-sm">学习感悟</span>
+                        </div>
+                    </div>
+                    
+                    <p class="mb-4">今天读完了今年的第一本书，书中的内容让我受益匪浅。感觉自己的视野又开阔了一些，学到了很多新的思维方式和知识。读书真的是一种很好的成长方式！</p>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute%20cat%20reading%20book%20hand-drawn%20style%20lo%20xiaohei&image_size=square" alt="读书照片" class="rounded-xl shadow-sm">
+                        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute%20stack%20of%20books%20hand-drawn%20style&image_size=square" alt="书籍照片" class="rounded-xl shadow-sm">
+                    </div>
+                    
+                    <div class="bg-secondary/30 p-4 rounded-xl">
+                        <h5 class="font-bold mb-2">成长反思</h5>
+                        <p>今天的阅读体验很棒，希望以后能保持每周读书的习惯。下次可以尝试读一些不同领域的书籍，丰富自己的知识结构。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- 底部 -->
+    <footer class="bg-cat/90 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="mb-2">� 小黑的成长日记 �</p>
+            <p>记录每一个想法和成长的瞬间</p>
+        </div>
+    </footer>
+    
+    <!-- 脚本 -->
+    <script>
+        // 设置默认日期为今天
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('entry-date').value = today;
+            
+            // 加载已保存的记录
+            loadEntries();
+            
+            // 图片上传功能
+            const uploadAreas = document.querySelectorAll('.upload-area');
+            uploadAreas.forEach(area => {
+                const input = area.querySelector('input[type="file"]');
+                area.addEventListener('click', () => input.click());
+                input.addEventListener('change', function(e) {
+                    if (e.target.files && e.target.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            area.innerHTML = `<img src="${e.target.result}" alt="上传的照片" class="w-full h-full object-cover rounded-xl">`;
+                        };
+                        reader.readAsDataURL(e.target.files[0]);
+                    }
+                });
+            });
+            
+            // 标签选择功能
+            const tagBtns = document.querySelectorAll('.tag-btn');
+            tagBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.classList.toggle('bg-accent');
+                });
+            });
+            
+            // 保存记录功能
+            document.getElementById('save-entry').addEventListener('click', function() {
+                const date = document.getElementById('entry-date').value;
+                const title = document.getElementById('entry-title').value;
+                const content = document.getElementById('entry-content').value;
+                const review = document.getElementById('entry-review').value;
+                
+                if (!title || !content) {
+                    alert('请填写标题和内容哦！');
+                    return;
+                }
+                
+                // 获取选中的标签
+                const selectedTags = Array.from(document.querySelectorAll('.tag-btn.bg-accent')).map(btn => btn.textContent);
+                
+                // 获取上传的图片
+                const images = [];
+                const imageElements = document.querySelectorAll('.upload-area img');
+                imageElements.forEach(img => {
+                    images.push(img.src);
+                });
+                
+                // 创建记录对象
+                const entry = {
+                    id: Date.now(),
+                    date: date,
+                    title: title,
+                    content: content,
+                    review: review,
+                    tags: selectedTags,
+                    images: images
+                };
+                
+                // 保存到localStorage
+                saveEntry(entry);
+                
+                // 重置表单
+                document.getElementById('entry-title').value = '';
+                document.getElementById('entry-content').value = '';
+                document.getElementById('entry-review').value = '';
+                tagBtns.forEach(btn => btn.classList.remove('bg-accent'));
+                uploadAreas.forEach(area => {
+                    area.innerHTML = `
+                        <input type="file" class="hidden" accept="image/*">
+                        <i class="fa fa-camera text-4xl text-secondary mb-2"></i>
+                        <p>点击上传</p>
+                    `;
+                    const input = area.querySelector('input[type="file"]');
+                    area.addEventListener('click', () => input.click());
+                    input.addEventListener('change', function(e) {
+                        if (e.target.files && e.target.files[0]) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                area.innerHTML = `<img src="${e.target.result}" alt="上传的照片" class="w-full h-full object-cover rounded-xl">`;
+                            };
+                            reader.readAsDataURL(e.target.files[0]);
+                        }
+                    });
+                });
+                
+                alert('记录保存成功！');
+            });
+            
+            // 主题切换功能
+            document.getElementById('theme-toggle').addEventListener('click', function() {
+                document.body.classList.toggle('dark-theme');
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('fa-moon-o')) {
+                    icon.classList.remove('fa-moon-o');
+                    icon.classList.add('fa-sun-o');
+                    this.innerHTML = '<i class="fa fa-sun-o mr-2"></i> 切换主题';
+                } else {
+                    icon.classList.remove('fa-sun-o');
+                    icon.classList.add('fa-moon-o');
+                    this.innerHTML = '<i class="fa fa-moon-o mr-2"></i> 切换主题';
+                }
+            });
+        });
+        
+        // 保存记录到localStorage
+        function saveEntry(entry) {
+            // 获取现有记录
+            let entries = JSON.parse(localStorage.getItem('growthDiaryEntries') || '[]');
+            
+            // 添加新记录到开头
+            entries.unshift(entry);
+            
+            // 保存回localStorage
+            localStorage.setItem('growthDiaryEntries', JSON.stringify(entries));
+            
+            // 重新加载记录列表
+            loadEntries();
+        }
+        
+        // 从localStorage加载记录
+        function loadEntries() {
+            // 获取记录
+            let entries = JSON.parse(localStorage.getItem('growthDiaryEntries') || '[]');
+            
+            // 获取记录列表容器
+            const entriesList = document.getElementById('entries-list');
+            const entriesContainer = entriesList.querySelector('div.space-y-8');
+            
+            // 清空容器（保留示例记录以外的内容）
+            // 先保存示例记录
+            const sampleEntries = [];
+            const allEntries = entriesContainer.children;
+            for (let i = 0; i < allEntries.length; i++) {
+                const entry = allEntries[i];
+                if (entry.querySelector('span.bg-accent/50') && 
+                    (entry.querySelector('h4').textContent === '第一次约会' || 
+                     entry.querySelector('h4').textContent === '一起看电影')) {
+                    sampleEntries.push(entry.outerHTML);
+                }
+            }
+            
+            // 清空容器
+            entriesContainer.innerHTML = '';
+            
+            // 添加新记录
+            entries.forEach(entry => {
+                const entryElement = document.createElement('div');
+                entryElement.className = 'bg-white p-6 rounded-3xl hand-drawn shadow-md';
+                
+                // 构建标签HTML
+                let tagsHTML = '';
+                entry.tags.forEach(tag => {
+                    tagsHTML += `<span class="bg-secondary/50 px-3 py-1 rounded-full text-sm">${tag}</span>`;
+                });
+                
+                // 构建图片HTML
+                let imagesHTML = '';
+                entry.images.forEach((imgSrc, index) => {
+                    if (index % 2 === 0) {
+                        imagesHTML += '<div class="grid grid-cols-2 gap-4 mb-4">';
+                    }
+                    imagesHTML += `<img src="${imgSrc}" alt="照片 ${index + 1}" class="rounded-xl shadow-sm">`;
+                    if (index % 2 === 1 || index === entry.images.length - 1) {
+                        imagesHTML += '</div>';
+                    }
+                });
+                
+                entryElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <span class="bg-accent/50 px-3 py-1 rounded-full text-sm">${entry.date}</span>
+                            <h4 class="text-xl font-bold mt-2">${entry.title}</h4>
+                        </div>
+                        <div class="flex space-x-2">
+                            ${tagsHTML}
+                        </div>
+                    </div>
+                    
+                    <p class="mb-4">${entry.content}</p>
+                    
+                    ${imagesHTML}
+                    
+                    <div class="bg-secondary/30 p-4 rounded-xl">
+                        <h5 class="font-bold mb-2">今日复盘</h5>
+                        <p>${entry.review}</p>
+                    </div>
+                `;
+                
+                entriesContainer.appendChild(entryElement);
+            });
+            
+            // 添加示例记录（如果没有实际记录）
+            if (entries.length === 0 && sampleEntries.length > 0) {
+                sampleEntries.forEach(sampleHTML => {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = sampleHTML;
+                    entriesContainer.appendChild(tempDiv.firstElementChild);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

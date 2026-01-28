@@ -254,17 +254,45 @@
             const uploadAreas = document.querySelectorAll('.upload-area');
             uploadAreas.forEach(area => {
                 const input = area.querySelector('input[type="file"]');
+                
+                // 点击上传
                 area.addEventListener('click', () => input.click());
+                
+                // 文件选择上传
                 input.addEventListener('change', function(e) {
                     if (e.target.files && e.target.files[0]) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            area.innerHTML = `<img src="${e.target.result}" alt="上传的照片" class="w-full h-full object-cover rounded-xl">`;
-                        };
-                        reader.readAsDataURL(e.target.files[0]);
+                        handleFileUpload(e.target.files[0], area);
+                    }
+                });
+                
+                // 拖拽上传
+                area.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    area.classList.add('bg-secondary/70');
+                });
+                
+                area.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    area.classList.remove('bg-secondary/70');
+                });
+                
+                area.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    area.classList.remove('bg-secondary/70');
+                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                        handleFileUpload(e.dataTransfer.files[0], area);
                     }
                 });
             });
+            
+            // 处理文件上传
+            function handleFileUpload(file, area) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    area.innerHTML = `<img src="${e.target.result}" alt="上传的照片" class="w-full h-full object-cover rounded-xl">`;
+                };
+                reader.readAsDataURL(file);
+            }
             
             // 标签选择功能
             const tagBtns = document.querySelectorAll('.tag-btn');
@@ -318,18 +346,37 @@
                 uploadAreas.forEach(area => {
                     area.innerHTML = `
                         <input type="file" class="hidden" accept="image/*">
-                        <i class="fa fa-camera text-4xl text-secondary mb-2"></i>
+                        <i class="fa fa-camera text-4xl text-cat mb-2"></i>
                         <p>点击上传</p>
                     `;
                     const input = area.querySelector('input[type="file"]');
+                    
+                    // 重新绑定点击上传事件
                     area.addEventListener('click', () => input.click());
+                    
+                    // 重新绑定文件选择上传事件
                     input.addEventListener('change', function(e) {
                         if (e.target.files && e.target.files[0]) {
-                            const reader = new FileReader();
-                            reader.onload = function(e) {
-                                area.innerHTML = `<img src="${e.target.result}" alt="上传的照片" class="w-full h-full object-cover rounded-xl">`;
-                            };
-                            reader.readAsDataURL(e.target.files[0]);
+                            handleFileUpload(e.target.files[0], area);
+                        }
+                    });
+                    
+                    // 重新绑定拖拽上传事件
+                    area.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        area.classList.add('bg-secondary/70');
+                    });
+                    
+                    area.addEventListener('dragleave', function(e) {
+                        e.preventDefault();
+                        area.classList.remove('bg-secondary/70');
+                    });
+                    
+                    area.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        area.classList.remove('bg-secondary/70');
+                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                            handleFileUpload(e.dataTransfer.files[0], area);
                         }
                     });
                 });
@@ -384,8 +431,8 @@
             for (let i = 0; i < allEntries.length; i++) {
                 const entry = allEntries[i];
                 if (entry.querySelector('span.bg-accent/50') && 
-                    (entry.querySelector('h4').textContent === '第一次约会' || 
-                     entry.querySelector('h4').textContent === '一起看电影')) {
+                    (entry.querySelector('h4').textContent === '学习编程的第一天' || 
+                     entry.querySelector('h4').textContent === '读完第一本书')) {
                     sampleEntries.push(entry.outerHTML);
                 }
             }

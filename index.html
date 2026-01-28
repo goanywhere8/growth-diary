@@ -242,6 +242,15 @@
     
     <!-- 脚本 -->
     <script>
+        // 处理文件上传
+        function handleFileUpload(file, area) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                area.innerHTML = `<img src="${e.target.result}" alt="上传的照片" class="w-full h-full object-cover rounded-xl">`;
+            };
+            reader.readAsDataURL(file);
+        }
+        
         // 设置默认日期为今天
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
@@ -283,16 +292,15 @@
                         handleFileUpload(e.dataTransfer.files[0], area);
                     }
                 });
+                
+                // 复制粘贴上传
+                area.addEventListener('paste', function(e) {
+                    e.preventDefault();
+                    if (e.clipboardData && e.clipboardData.files && e.clipboardData.files[0]) {
+                        handleFileUpload(e.clipboardData.files[0], area);
+                    }
+                });
             });
-            
-            // 处理文件上传
-            function handleFileUpload(file, area) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    area.innerHTML = `<img src="${e.target.result}" alt="上传的照片" class="w-full h-full object-cover rounded-xl">`;
-                };
-                reader.readAsDataURL(file);
-            }
             
             // 标签选择功能
             const tagBtns = document.querySelectorAll('.tag-btn');
@@ -379,6 +387,14 @@
                             handleFileUpload(e.dataTransfer.files[0], area);
                         }
                     });
+                    
+                    // 重新绑定复制粘贴上传事件
+                    area.addEventListener('paste', function(e) {
+                        e.preventDefault();
+                        if (e.clipboardData && e.clipboardData.files && e.clipboardData.files[0]) {
+                            handleFileUpload(e.clipboardData.files[0], area);
+                        }
+                    });
                 });
                 
                 alert('记录保存成功！');
@@ -392,11 +408,75 @@
                     icon.classList.remove('fa-moon-o');
                     icon.classList.add('fa-sun-o');
                     this.innerHTML = '<i class="fa fa-sun-o mr-2"></i> 切换主题';
+                    // 暗色主题
+                    document.body.classList.add('bg-dark', 'text-light');
+                    document.body.classList.remove('bg-light', 'text-dark');
                 } else {
                     icon.classList.remove('fa-sun-o');
                     icon.classList.add('fa-moon-o');
                     this.innerHTML = '<i class="fa fa-moon-o mr-2"></i> 切换主题';
+                    // 亮色主题
+                    document.body.classList.add('bg-light', 'text-dark');
+                    document.body.classList.remove('bg-dark', 'text-light');
                 }
+            });
+            
+            // 新想法按钮功能
+            document.getElementById('new-entry-btn').addEventListener('click', function() {
+                // 滚动到表单区域
+                document.getElementById('entry-form').scrollIntoView({ behavior: 'smooth' });
+                // 清空表单
+                document.getElementById('entry-title').value = '';
+                document.getElementById('entry-content').value = '';
+                document.getElementById('entry-review').value = '';
+                const tagBtns = document.querySelectorAll('.tag-btn');
+                tagBtns.forEach(btn => btn.classList.remove('bg-accent'));
+                const uploadAreas = document.querySelectorAll('.upload-area');
+                uploadAreas.forEach(area => {
+                    area.innerHTML = `
+                        <input type="file" class="hidden" accept="image/*">
+                        <i class="fa fa-camera text-4xl text-cat mb-2"></i>
+                        <p>点击上传</p>
+                    `;
+                    const input = area.querySelector('input[type="file"]');
+                    
+                    // 重新绑定点击上传事件
+                    area.addEventListener('click', () => input.click());
+                    
+                    // 重新绑定文件选择上传事件
+                    input.addEventListener('change', function(e) {
+                        if (e.target.files && e.target.files[0]) {
+                            handleFileUpload(e.target.files[0], area);
+                        }
+                    });
+                    
+                    // 重新绑定拖拽上传事件
+                    area.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        area.classList.add('bg-secondary/70');
+                    });
+                    
+                    area.addEventListener('dragleave', function(e) {
+                        e.preventDefault();
+                        area.classList.remove('bg-secondary/70');
+                    });
+                    
+                    area.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        area.classList.remove('bg-secondary/70');
+                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                            handleFileUpload(e.dataTransfer.files[0], area);
+                        }
+                    });
+                    
+                    // 重新绑定复制粘贴上传事件
+                    area.addEventListener('paste', function(e) {
+                        e.preventDefault();
+                        if (e.clipboardData && e.clipboardData.files && e.clipboardData.files[0]) {
+                            handleFileUpload(e.clipboardData.files[0], area);
+                        }
+                    });
+                });
             });
         });
         
